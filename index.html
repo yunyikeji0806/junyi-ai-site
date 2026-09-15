@@ -1,0 +1,1163 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>筠益AI — 企业AI服务专家</title>
+    <link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+    <style>
+        /* ===== 全局变量 ===== */
+        :root {
+            --primary: #0f1e3d;
+            --primary-light: #1a2d54;
+            --accent: #d4a843;
+            --accent-light: #e8c46a;
+            --cta: #c8322d;
+            --cta-light: #e04a45;
+            --bg: #ffffff;
+            --bg-gray: #f7f8fa;
+            --bg-dark: #0f1e3d;
+            --text-1: #1f2329;
+            --text-2: #4e5969;
+            --text-3: #86909c;
+            --border: #e5e6eb;
+            --serif: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+            --sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--sans);
+            color: var(--text-1);
+            background: var(--bg);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; display: block; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* ===== 导航栏（飞书式白色导航） ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .navbar.scrolled { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .navbar-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between; height: 64px;
+        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-mark { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+        .logo-text {
+            font-family: var(--serif); font-size: 20px; font-weight: 700;
+            color: var(--primary); letter-spacing: 1px;
+        }
+        .logo-text span { color: var(--accent); }
+        .nav-links { display: flex; align-items: center; gap: 36px; list-style: none; }
+        .nav-links a {
+            color: var(--text-2); font-size: 15px; font-weight: 400;
+            transition: color 0.2s ease; position: relative;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-cta {
+            background: var(--cta); color: #fff !important;
+            padding: 8px 22px; border-radius: 4px; font-weight: 500 !important;
+            transition: all 0.2s ease !important; font-size: 14px !important;
+        }
+        .nav-cta:hover { background: var(--cta-light); transform: translateY(-1px); }
+        .mobile-menu-btn {
+            display: none; background: none; border: none; cursor: pointer; padding: 8px;
+        }
+        .mobile-menu-btn span {
+            display: block; width: 22px; height: 2px; background: var(--text-1); margin: 5px 0; transition: all 0.3s ease;
+        }
+
+        /* ===== Hero区（飞书式大气布局） ===== */
+        .hero {
+            position: relative; padding: 140px 0 80px;
+            background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 0; right: -200px; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .hero-content {
+            display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px;
+            align-items: center; position: relative; z-index: 2;
+        }
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px; background: rgba(200,50,45,0.06);
+            border-radius: 20px; color: var(--cta); font-size: 13px;
+            font-weight: 500; margin-bottom: 24px;
+        }
+        .hero-tag::before { content: ''; width: 6px; height: 6px; background: var(--cta); border-radius: 50%; }
+        .hero h1 {
+            font-family: var(--serif); font-size: 52px; font-weight: 900;
+            color: var(--primary); line-height: 1.25; margin-bottom: 20px; letter-spacing: 1px;
+        }
+        .hero h1 .highlight { color: var(--accent); }
+        .hero h1 .highlight-red { color: var(--cta); }
+        .hero-subtitle {
+            font-size: 17px; color: var(--text-2); line-height: 1.8;
+            margin-bottom: 36px; max-width: 520px;
+        }
+        .hero-buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 48px; }
+        .btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--cta); color: #fff; padding: 14px 32px;
+            font-size: 15px; font-weight: 500; border: none; border-radius: 6px;
+            cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-primary:hover { background: var(--cta-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(200,50,45,0.25); }
+        .btn-secondary {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: #fff; color: var(--primary); padding: 14px 32px;
+            font-size: 15px; font-weight: 500; border: 1px solid var(--border);
+            border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
+        }
+        .btn-secondary:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+        .hero-stats { display: flex; gap: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+        .stat-item { text-align: left; }
+        .stat-number {
+            font-family: var(--serif); font-size: 32px; font-weight: 700;
+            color: var(--primary); line-height: 1; margin-bottom: 6px;
+        }
+        .stat-number span { font-size: 16px; color: var(--text-3); font-weight: 400; }
+        .stat-label { font-size: 13px; color: var(--text-3); }
+        .hero-visual { position: relative; }
+        .hero-image-wrap {
+            position: relative; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 20px 60px rgba(15,30,61,0.15);
+        }
+        .hero-image-wrap img { width: 100%; height: 440px; object-fit: cover; }
+        .hero-image-badge {
+            position: absolute; bottom: 20px; left: 20px; right: 20px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(10px);
+            padding: 16px 20px; border-radius: 8px; border-left: 3px solid var(--cta);
+        }
+        .hero-image-badge h4 { font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 2px; }
+        .hero-image-badge p { font-size: 13px; color: var(--text-2); }
+
+        /* ===== 通用区块 ===== */
+        .section { padding: 80px 0; }
+        .section-gray { background: var(--bg-gray); }
+        .section-dark { background: var(--bg-dark); }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-tag {
+            display: inline-block; font-size: 13px; color: var(--cta);
+            letter-spacing: 3px; margin-bottom: 12px; font-weight: 500;
+        }
+        .section-title {
+            font-family: var(--serif); font-size: 36px; font-weight: 700;
+            color: var(--primary); margin-bottom: 16px; letter-spacing: 1px;
+        }
+        .section-dark .section-title { color: #fff; }
+        .section-desc {
+            font-size: 16px; color: var(--text-2); max-width: 600px;
+            margin: 0 auto; line-height: 1.8;
+        }
+        .section-dark .section-desc { color: rgba(255,255,255,0.65); }
+
+        /* ===== 关于我们 ===== */
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+        .about-images { position: relative; }
+        .about-img-main {
+            width: 100%; height: 420px; object-fit: cover;
+            border-radius: 12px; box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+        }
+        .about-img-sub {
+            position: absolute; bottom: -24px; right: -24px;
+            width: 220px; height: 160px; object-fit: cover;
+            border-radius: 10px; border: 4px solid #fff;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+        .about-content h2 {
+            font-family: var(--serif); font-size: 32px; font-weight: 700;
+            color: var(--primary); margin-bottom: 20px; line-height: 1.4;
+        }
+        .about-content h2 span { color: var(--cta); }
+        .about-content > p {
+            font-size: 15px; color: var(--text-2); line-height: 1.9; margin-bottom: 16px;
+        }
+        .about-features { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 28px; }
+        .about-feature { display: flex; align-items: flex-start; gap: 12px; }
+        .about-feature-icon {
+            width: 36px; height: 36px; background: rgba(200,50,45,0.06);
+            border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .about-feature-icon svg { width: 18px; height: 18px; stroke: var(--cta); }
+        .about-feature h4 { font-size: 14px; font-weight: 600; color: var(--primary); margin-bottom: 2px; }
+        .about-feature p { font-size: 12px; color: var(--text-3); margin: 0; line-height: 1.5; }
+
+        /* ===== 核心能力（飞书式功能卡片） ===== */
+        .cap-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+        .cap-card {
+            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            overflow: hidden; transition: all 0.3s ease; cursor: default;
+        }
+        .cap-card:hover {
+            transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+            border-color: transparent;
+        }
+        .cap-img { width: 100%; height: 140px; object-fit: cover; }
+        .cap-body { padding: 24px 20px 28px; }
+        .cap-icon-wrap {
+            width: 44px; height: 44px; background: rgba(212,168,67,0.1);
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 16px;
+        }
+        .cap-icon-wrap svg { width: 22px; height: 22px; stroke: var(--accent); }
+        .cap-body h3 { font-size: 18px; font-weight: 600; color: var(--primary); margin-bottom: 10px; }
+        .cap-body p { font-size: 13px; color: var(--text-2); line-height: 1.8; }
+
+        /* ===== 解决方案 ===== */
+        .sol-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+        .sol-card {
+            display: flex; background: #fff; border: 1px solid var(--border);
+            border-radius: 12px; overflow: hidden; transition: all 0.3s ease;
+        }
+        .sol-card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.08); transform: translateY(-3px); }
+        .sol-img { width: 200px; flex-shrink: 0; overflow: hidden; }
+        .sol-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .sol-card:hover .sol-img img { transform: scale(1.05); }
+        .sol-content { padding: 28px 24px; flex: 1; }
+        .sol-tag {
+            display: inline-block; font-size: 12px; color: var(--cta);
+            background: rgba(200,50,45,0.06); padding: 4px 12px;
+            border-radius: 4px; margin-bottom: 12px; font-weight: 500;
+        }
+        .sol-content h3 { font-size: 20px; font-weight: 600; color: var(--primary); margin-bottom: 10px; }
+        .sol-content p { font-size: 14px; color: var(--text-2); line-height: 1.8; margin-bottom: 14px; }
+        .sol-points { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; }
+        .sol-points li {
+            font-size: 12px; color: var(--text-3); padding: 4px 10px;
+            background: var(--bg-gray); border-radius: 4px;
+        }
+
+        /* ===== 活动足迹（城市分站） ===== */
+        .city-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .city-card {
+            position: relative; cursor: pointer; border-radius: 12px;
+            overflow: hidden; background: #fff; border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        .city-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.12); }
+        .city-card img { width: 100%; height: 200px; object-fit: cover; transition: transform 0.5s ease; }
+        .city-card:hover img { transform: scale(1.06); }
+        .city-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 20px; background: linear-gradient(transparent, rgba(15,30,61,0.9));
+        }
+        .city-name {
+            font-family: var(--serif); font-size: 20px; font-weight: 700;
+            color: #fff; margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+        }
+        .city-name svg { width: 16px; height: 16px; stroke: var(--accent); }
+        .city-count { font-size: 12px; color: var(--accent-light); }
+        .city-count span { color: rgba(255,255,255,0.5); }
+        .city-view-btn {
+            position: absolute; top: 14px; right: 14px;
+            background: rgba(200,50,45,0.9); color: #fff;
+            padding: 6px 14px; font-size: 12px; border-radius: 4px;
+            opacity: 0; transform: translateY(-8px); transition: all 0.3s ease;
+        }
+        .city-card:hover .city-view-btn { opacity: 1; transform: translateY(0); }
+
+        /* ===== 灯箱画廊 ===== */
+        .lightbox {
+            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,30,61,0.97); z-index: 2000;
+            align-items: center; justify-content: center; flex-direction: column;
+        }
+        .lightbox.active { display: flex; }
+        .lightbox-header {
+            position: absolute; top: 0; left: 0; right: 0;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 32px; background: rgba(0,0,0,0.3);
+        }
+        .lightbox-title { font-family: var(--serif); font-size: 20px; color: #fff; font-weight: 600; }
+        .lightbox-counter { font-size: 14px; color: var(--accent); margin-left: 16px; }
+        .lightbox-close { background: none; border: none; cursor: pointer; padding: 8px; color: #fff; transition: color 0.2s; }
+        .lightbox-close:hover { color: var(--cta-light); }
+        .lightbox-close svg { width: 28px; height: 28px; stroke: currentColor; }
+        .lightbox-img-container { max-width: 85vw; max-height: 72vh; display: flex; align-items: center; justify-content: center; }
+        .lightbox-img-container img { max-width: 100%; max-height: 72vh; object-fit: contain; border-radius: 8px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+        .lightbox-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: #fff; width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.2s ease; z-index: 10;
+        }
+        .lightbox-nav:hover { background: var(--cta); border-color: var(--cta); }
+        .lightbox-nav svg { width: 22px; height: 22px; stroke: currentColor; }
+        .lightbox-prev { left: 24px; }
+        .lightbox-next { right: 24px; }
+        .lightbox-thumbs {
+            position: absolute; bottom: 16px; left: 0; right: 0;
+            display: flex; justify-content: center; gap: 6px; padding: 0 20px;
+            overflow-x: auto; flex-wrap: nowrap;
+        }
+        .lightbox-thumb {
+            width: 56px; height: 42px; object-fit: cover; cursor: pointer;
+            opacity: 0.5; transition: all 0.2s ease; border: 2px solid transparent;
+            border-radius: 4px; flex-shrink: 0;
+        }
+        .lightbox-thumb:hover { opacity: 0.8; }
+        .lightbox-thumb.active { opacity: 1; border-color: var(--accent); }
+
+        /* ===== 直击现场（视频区） ===== */
+        .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .video-card {
+            background: #fff; border: 1px solid var(--border); border-radius: 12px;
+            overflow: hidden; transition: all 0.3s ease;
+        }
+        .video-card:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.08); transform: translateY(-3px); }
+        .video-player { position: relative; width: 100%; background: var(--primary); aspect-ratio: 16/9; overflow: hidden; }
+        .video-player video { width: 100%; height: 100%; object-fit: cover; }
+        .video-play-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(15,30,61,0.3); cursor: pointer; transition: opacity 0.3s ease;
+        }
+        .video-play-overlay.hidden { opacity: 0; pointer-events: none; }
+        .play-btn {
+            width: 56px; height: 56px; background: rgba(200,50,45,0.9);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .video-play-overlay:hover .play-btn { background: var(--cta); transform: scale(1.1); }
+        .play-btn svg { width: 24px; height: 24px; stroke: #fff; fill: #fff; margin-left: 3px; }
+        .video-info { padding: 20px 22px; }
+        .video-tag {
+            display: inline-block; font-size: 11px; color: var(--cta);
+            background: rgba(200,50,45,0.06); padding: 3px 10px;
+            border-radius: 4px; margin-bottom: 10px; font-weight: 500;
+        }
+        .video-info h4 { font-size: 16px; font-weight: 600; color: var(--primary); margin-bottom: 6px; }
+        .video-info p { font-size: 13px; color: var(--text-3); }
+
+        /* ===== 合作机构（飞书式logo墙） ===== */
+        .partners { padding: 64px 0; border-top: 1px solid var(--border); }
+        .partners-title {
+            text-align: center; font-size: 14px; color: var(--text-3);
+            letter-spacing: 3px; margin-bottom: 36px;
+        }
+        .partners-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; }
+        .partner-item {
+            background: #fff; border: 1px solid var(--border); border-radius: 8px;
+            padding: 20px 12px; text-align: center; transition: all 0.2s ease;
+        }
+        .partner-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+        .partner-item h5 { font-family: var(--serif); font-size: 14px; color: var(--primary); font-weight: 600; margin-bottom: 3px; }
+        .partner-item p { font-size: 11px; color: var(--text-3); }
+
+        /* ===== CTA区（飞书式底部召唤） ===== */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 72px 0; text-align: center; position: relative; overflow: hidden;
+        }
+        .cta-section::before {
+            content: ''; position: absolute; top: -100px; right: -100px;
+            width: 400px; height: 400px; background: radial-gradient(circle, rgba(212,168,67,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+        .cta-section h2 {
+            font-family: var(--serif); font-size: 32px; font-weight: 700;
+            color: #fff; margin-bottom: 12px; position: relative; z-index: 2;
+        }
+        .cta-section h2 span { color: var(--accent); }
+        .cta-section p {
+            font-size: 16px; color: rgba(255,255,255,0.65);
+            margin-bottom: 32px; position: relative; z-index: 2;
+        }
+        .cta-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2; }
+        .cta-buttons .btn-primary { padding: 14px 36px; }
+        .cta-buttons .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: transparent; color: #fff; padding: 14px 36px;
+            font-size: 15px; font-weight: 500; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px; cursor: pointer; transition: all 0.2s ease;
+        }
+        .cta-buttons .btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+        /* ===== 页脚 ===== */
+        .footer { background: var(--primary); padding: 56px 0 28px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 36px; }
+        .footer-brand p { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.8; margin-top: 16px; max-width: 300px; }
+        .footer-brand .logo-text { color: #fff; }
+        .footer-col h4 { font-size: 15px; color: #fff; margin-bottom: 18px; font-weight: 600; }
+        .footer-col ul { list-style: none; }
+        .footer-col li { margin-bottom: 10px; }
+        .footer-col a { font-size: 13px; color: rgba(255,255,255,0.5); transition: color 0.2s ease; }
+        .footer-col a:hover { color: var(--accent); }
+        .footer-bottom {
+            padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.08);
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+        }
+        .footer-bottom p { font-size: 12px; color: rgba(255,255,255,0.35); }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; gap: 40px; }
+            .hero-visual { max-width: 560px; }
+            .cap-grid { grid-template-columns: repeat(2, 1fr); }
+            .city-grid { grid-template-columns: repeat(2, 1fr); }
+            .video-grid { grid-template-columns: repeat(2, 1fr); }
+            .partners-grid { grid-template-columns: repeat(3, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .hero { padding: 100px 0 60px; }
+            .hero h1 { font-size: 34px; }
+            .hero-stats { gap: 24px; flex-wrap: wrap; }
+            .stat-number { font-size: 26px; }
+            .section { padding: 56px 0; }
+            .section-title { font-size: 26px; }
+            .about-grid { grid-template-columns: 1fr; gap: 32px; }
+            .about-img-sub { display: none; }
+            .cap-grid { grid-template-columns: 1fr; }
+            .sol-grid { grid-template-columns: 1fr; }
+            .sol-card { flex-direction: column; }
+            .sol-img { width: 100%; height: 180px; }
+            .city-grid { grid-template-columns: 1fr; }
+            .video-grid { grid-template-columns: 1fr; }
+            .partners-grid { grid-template-columns: repeat(2, 1fr); }
+            .cta-section h2 { font-size: 24px; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-image-wrap img { height: 300px; }
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            .lightbox-nav { width: 40px; height: 40px; }
+        }
+
+        /* ===== 滚动动画 ===== */
+        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+<!-- ===== 导航栏 ===== -->
+<nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+        <a href="#" class="logo">
+            <img src="assets/logo.png" class="logo-mark" alt="筠益LOGO">
+            <div class="logo-text">筠益<span>AI</span></div>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#capabilities">核心能力</a></li>
+            <li><a href="#solutions">解决方案</a></li>
+            <li><a href="#footprint">活动足迹</a></li>
+            <li><a href="#live">直击现场</a></li>
+            <li><a href="#register" class="nav-cta">立即报名</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</nav>
+
+<!-- ===== Hero区 ===== -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-tag">企业AI服务专家</div>
+                <h1>让AI成为企业<br><span class="highlight">新质生产力</span><br>的<span class="highlight-red">核心引擎</span></h1>
+                <p class="hero-subtitle">
+                    筠益AI专注企业场景AI深度落地，为制造业、电商、教育等行业提供一站式AI数字化解决方案，助力企业实现降本增效与智能升级。
+                </p>
+                <div class="hero-buttons">
+                    <a href="#register" class="btn-primary">
+                        预约免费诊断
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                    <a href="#capabilities" class="btn-secondary">了解核心能力</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item"><div class="stat-number">10<span>+</span></div><div class="stat-label">覆盖城市</div></div>
+                    <div class="stat-item"><div class="stat-number">50<span>+</span></div><div class="stat-label">AI赋能会议</div></div>
+                    <div class="stat-item"><div class="stat-number">1000<span>+</span></div><div class="stat-label">服务企业</div></div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-image-wrap">
+                    <img src="assets/weifang-huiyi-1.jpg" alt="潍坊高新区AI赋能汇报会">
+                    <div class="hero-image-badge">
+                        <h4>潍坊高新区AI赋能汇报会</h4>
+                        <p>与政府园区深度合作，推动区域产业智能升级</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 关于我们 ===== -->
+<section class="section" id="about">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-images fade-in">
+                <img src="assets/yantai-lansezhigu.jpg" alt="烟台蓝色智谷AI赋能沙龙" class="about-img-main">
+                <img src="assets/qingdao-gongyeyanjiu.jpg" alt="联合工业技术研究院AI赋能沙龙" class="about-img-sub">
+            </div>
+            <div class="about-content fade-in">
+                <div class="section-tag" style="text-align:left;">ABOUT US</div>
+                <h2>杭州筠益科技<br><span>专注企业AI落地</span></h2>
+                <p>
+                    杭州筠益科技有限公司是企业AI服务领域的专业机构，以"让AI真正用起来"为使命，专注于AI技术在企业场景的深度落地与应用推广。
+                </p>
+                <p>
+                    我们为不同规模、不同行业的企业提供从诊断、培训到实施的全链路AI赋能服务。团队核心成员来自头部科技企业，已在潍坊、烟台、青岛、沈阳、大连、济南等十余个城市举办AI赋能会议。
+                </p>
+                <div class="about-features">
+                    <div class="about-feature">
+                        <div class="about-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+                        <div><h4>全场景AI覆盖</h4><p>办公、营销、生产全链路</p></div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+                        <div><h4>场景化落地交付</h4><p>不空谈，重实效</p></div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></div>
+                        <div><h4>专家团队护航</h4><p>资深顾问全程指导</p></div>
+                    </div>
+                    <div class="about-feature">
+                        <div class="about-feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg></div>
+                        <div><h4>效果可量化追踪</h4><p>降本增效看得见</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 核心能力 ===== -->
+<section class="section section-gray" id="capabilities">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">CORE CAPABILITIES</div>
+            <h2 class="section-title">筠益AI四大核心能力</h2>
+            <p class="section-desc">基于大模型技术与企业场景深度整合，覆盖企业日常运营全场景</p>
+        </div>
+        <div class="cap-grid">
+            <div class="cap-card fade-in">
+                <img src="assets/yantai-huiyi.jpg" alt="智能文档处理" class="cap-img">
+                <div class="cap-body">
+                    <div class="cap-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+                    <h3>智能文档处理</h3>
+                    <p>AI自动生成、润色、翻译各类办公文档，合同审查、报告撰写、邮件回复一键完成，效率提升80%以上。</p>
+                </div>
+            </div>
+            <div class="cap-card fade-in">
+                <img src="assets/yantai-chahuahui.jpg" alt="智能对话助手" class="cap-img">
+                <div class="cap-body">
+                    <div class="cap-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                    <h3>智能对话助手</h3>
+                    <p>企业级知识库问答，员工随时查询制度、流程、产品信息；客服自动应答，7x24小时在线，响应速度提升10倍。</p>
+                </div>
+            </div>
+            <div class="cap-card fade-in">
+                <img src="assets/qingdao-zonggonghui.jpg" alt="AI内容创作" class="cap-img">
+                <div class="cap-body">
+                    <div class="cap-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+                    <h3>AI内容创作</h3>
+                    <p>营销文案、短视频脚本、海报设计、PPT制作全链路AI辅助，内容产出效率提升5倍，让创意不再受限于人力。</p>
+                </div>
+            </div>
+            <div class="cap-card fade-in">
+                <img src="assets/shenyang-chanyeyuan.jpg" alt="业务流程自动化" class="cap-img">
+                <div class="cap-body">
+                    <div class="cap-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"/></svg></div>
+                    <h3>业务流程自动化</h3>
+                    <p>打通企业审批、日程、任务等模块，AI自动触发流程、分配任务、跟进进度，减少重复劳动，让员工聚焦高价值工作。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 解决方案 ===== -->
+<section class="section" id="solutions">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">SOLUTIONS</div>
+            <h2 class="section-title">行业解决方案</h2>
+            <p class="section-desc">深入理解不同行业的痛点与需求，提供量身定制的AI落地路径</p>
+        </div>
+        <div class="sol-grid">
+            <div class="sol-card fade-in">
+                <div class="sol-img"><img src="assets/weifang-guangdian-1.jpg" alt="制造业解决方案"></div>
+                <div class="sol-content">
+                    <span class="sol-tag">制造业</span>
+                    <h3>智能制造AI升级</h3>
+                    <p>面向生产制造企业，从研发设计、生产管理到质量检测、供应链优化，AI全链路赋能，助力降本增效。</p>
+                    <ul class="sol-points"><li>智能排产</li><li>质量检测</li><li>设备运维</li><li>供应链优化</li></ul>
+                </div>
+            </div>
+            <div class="sol-card fade-in">
+                <div class="sol-img"><img src="assets/dalian.jpg" alt="电商解决方案"></div>
+                <div class="sol-content">
+                    <span class="sol-tag">电商零售</span>
+                    <h3>电商AI增长引擎</h3>
+                    <p>为电商企业提供商品文案生成、智能客服、营销策划、数据分析等全场景AI工具，显著提升运营效率与转化率。</p>
+                    <ul class="sol-points"><li>智能客服</li><li>商品文案</li><li>营销策划</li><li>数据分析</li></ul>
+                </div>
+            </div>
+            <div class="sol-card fade-in">
+                <div class="sol-img"><img src="assets/yantai-yeda.jpg" alt="政府园区解决方案"></div>
+                <div class="sol-content">
+                    <span class="sol-tag">政府园区</span>
+                    <h3>园区AI赋能计划</h3>
+                    <p>与政府园区、人才集团合作，为园区企业提供AI培训、诊断、落地一体化服务，推动区域产业数字化转型。</p>
+                    <ul class="sol-points"><li>AI培训</li><li>企业诊断</li><li>政策对接</li><li>资源链接</li></ul>
+                </div>
+            </div>
+            <div class="sol-card fade-in">
+                <div class="sol-img"><img src="assets/qingdao-opc-1.jpg" alt="创业者解决方案"></div>
+                <div class="sol-content">
+                    <span class="sol-tag">创业者/自媒体</span>
+                    <h3>创业者AI提效工具包</h3>
+                    <p>为中小企业主、自媒体创业者提供轻量化AI工具集，一人也能高效运营，用AI弥补团队规模不足。</p>
+                    <ul class="sol-points"><li>内容生产</li><li>客户管理</li><li>财务辅助</li><li>个人助理</li></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 活动足迹 ===== -->
+<section class="section section-gray" id="footprint">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">FOOTPRINT</div>
+            <h2 class="section-title">全国活动足迹</h2>
+            <p class="section-desc">从潍坊到大连，从政府园区到高校讲堂，筠益AI的脚步遍布全国。点击城市卡片查看该站全部会销现场</p>
+        </div>
+        <div class="city-grid" id="cityGrid"></div>
+    </div>
+</section>
+
+<!-- ===== 灯箱画廊 ===== -->
+<div class="lightbox" id="lightbox">
+    <div class="lightbox-header">
+        <div>
+            <span class="lightbox-title" id="lightboxTitle">潍坊站</span>
+            <span class="lightbox-counter" id="lightboxCounter">1 / 8</span>
+        </div>
+        <button class="lightbox-close" onclick="closeLightbox()">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+    </div>
+    <div class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+    </div>
+    <div class="lightbox-img-container">
+        <img id="lightboxImg" src="" alt="">
+    </div>
+    <div class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
+    <div class="lightbox-thumbs" id="lightboxThumbs"></div>
+</div>
+
+<!-- ===== 直击现场 ===== -->
+<section class="section" id="live">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">LIVE SCENE</div>
+            <h2 class="section-title">直击现场</h2>
+            <p class="section-desc">真实会销现场视频记录，感受筠益AI赋能会议的热烈氛围与实战分享</p>
+        </div>
+        <div class="video-grid" id="videoGrid"></div>
+    </div>
+</section>
+
+<!-- ===== 合作机构 ===== -->
+<section class="partners">
+    <div class="container">
+        <div class="partners-title fade-in">合作机构与服务客户</div>
+        <div class="partners-grid">
+            <div class="partner-item fade-in"><h5>潍坊高新区</h5><p>政府园区</p></div>
+            <div class="partner-item fade-in"><h5>烟台业达人才集团</h5><p>人才服务</p></div>
+            <div class="partner-item fade-in"><h5>青岛院士港</h5><p>科创园区</p></div>
+            <div class="partner-item fade-in"><h5>沈阳数创OPC</h5><p>产业园区</p></div>
+            <div class="partner-item fade-in"><h5>青岛工业技术研究院</h5><p>科研机构</p></div>
+            <div class="partner-item fade-in"><h5>辽宁对外经贸学院</h5><p>高校合作</p></div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CTA区 ===== -->
+<section class="cta-section" id="register">
+    <div class="container">
+        <h2 class="fade-in">开启企业的<span>AI智能升级之旅</span></h2>
+        <p class="fade-in">填写信息，我们的AI顾问将在24小时内与您联系，为您提供免费的企业AI诊断</p>
+        <div class="cta-buttons fade-in">
+            <a href="#register-form" class="btn-primary">立即预约免费诊断</a>
+            <a href="#capabilities" class="btn-outline">了解更多</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 报名表单 ===== -->
+<section class="section section-gray" id="register-form">
+    <div class="container">
+        <div class="section-header fade-in">
+            <div class="section-tag">REGISTER</div>
+            <h2 class="section-title">预约免费诊断</h2>
+            <p class="section-desc">填写以下信息，开启AI赋能第一步</p>
+        </div>
+        <div style="max-width: 640px; margin: 0 auto;" class="fade-in">
+            <form onsubmit="handleSubmit(event)" style="background: #fff; padding: 40px; border-radius: 12px; border: 1px solid var(--border);">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">姓名 <span style="color: var(--cta);">*</span></label>
+                        <input type="text" placeholder="请输入您的姓名" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--cta)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">手机号 <span style="color: var(--cta);">*</span></label>
+                        <input type="tel" placeholder="请输入手机号码" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--cta)'" onblur="this.style.borderColor='var(--border)'">
+                    </div>
+                </div>
+                <div style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">公司名称 <span style="color: var(--cta);">*</span></label>
+                    <input type="text" placeholder="请输入公司全称" required style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--cta)'" onblur="this.style.borderColor='var(--border)'">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div>
+                        <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">所属行业</label>
+                        <select style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); background: #fff; color: var(--text-1);">
+                            <option value="">请选择行业</option>
+                            <option value="manufacturing">制造业</option>
+                            <option value="ecommerce">电商零售</option>
+                            <option value="education">教育培训</option>
+                            <option value="service">服务业</option>
+                            <option value="government">政府/园区</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">公司规模</label>
+                        <select style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); background: #fff; color: var(--text-1);">
+                            <option value="">请选择规模</option>
+                            <option value="small">1-50人</option>
+                            <option value="medium">51-200人</option>
+                            <option value="large">201-500人</option>
+                            <option value="enterprise">500人以上</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 14px; color: var(--text-2); margin-bottom: 8px; font-weight: 500;">您最关注的AI应用场景</label>
+                    <textarea rows="3" placeholder="例如：智能客服、文档处理、营销文案、数据分析等" style="width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; font-family: var(--sans); resize: vertical; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--cta)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 14px;">立即提交 · 免费诊断</button>
+                <p style="text-align: center; font-size: 12px; color: var(--text-3); margin-top: 16px;">提交即表示您同意我们的隐私政策，我们承诺保护您的信息安全</p>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- ===== 页脚 ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">
+                    <img src="assets/logo.png" class="logo-mark" alt="筠益LOGO">
+                    <div class="logo-text">筠益<span>AI</span></div>
+                </a>
+                <p>杭州筠益科技有限公司 — 企业AI服务专家，专注AI技术在企业场景的深度落地，让AI真正成为企业的新质生产力。</p>
+            </div>
+            <div class="footer-col">
+                <h4>快速导航</h4>
+                <ul>
+                    <li><a href="#about">关于我们</a></li>
+                    <li><a href="#capabilities">核心能力</a></li>
+                    <li><a href="#solutions">解决方案</a></li>
+                    <li><a href="#footprint">活动足迹</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>服务支持</h4>
+                <ul>
+                    <li><a href="#register-form">免费诊断</a></li>
+                    <li><a href="#">实战训练营</a></li>
+                    <li><a href="#">企业内训</a></li>
+                    <li><a href="#">定制开发</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>联系我们</h4>
+                <ul>
+                    <li><a href="#" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        浙江省杭州市
+                    </a></li>
+                    <li><a href="#" style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                        商务合作请留言
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 杭州筠益科技有限公司 版权所有</p>
+            <p>筠益AI · 企业AI服务中心</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+// 资源地址解析：发布版通过 window.EMBED_MAP 将 assets/xxx 解析为内嵌 data URI；本地版直接返回原路径
+function resolveUrl(u) {
+    if (window.EMBED_MAP && window.EMBED_MAP[u]) return window.EMBED_MAP[u];
+    return u;
+}
+// 全局资源替换：线上发布版把页面中所有 assets/ 引用替换为内嵌 data URI
+(function () {
+    function replaceAll() {
+        var MAP = window.EMBED_MAP;
+        if (!MAP) return;
+        var els = document.querySelectorAll('img[src^="assets/"], video[src^="assets/"], source[src^="assets/"]');
+        for (var i = 0; i < els.length; i++) {
+            var u = els[i].getAttribute('src');
+            if (MAP[u]) els[i].setAttribute('src', MAP[u]);
+        }
+        els = document.querySelectorAll('[style*="assets/"]');
+        for (var j = 0; j < els.length; j++) {
+            var st = els[j].getAttribute('style');
+            if (!st) continue;
+            els[j].setAttribute('style', st.replace(/url\(["']?assets\/[^"')]+["']?\)/g, function (m) {
+                var key = m.replace(/url\(["']?/, '').replace(/["']?\)$/, '');
+                return MAP[key] ? 'url("' + MAP[key] + '")' : m;
+            }));
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', replaceAll);
+    } else { replaceAll(); }
+    if (window.MutationObserver) {
+        var mo = new MutationObserver(replaceAll);
+        mo.observe(document.documentElement, { childList: true, subtree: true });
+    }
+    setTimeout(replaceAll, 200);
+    setTimeout(replaceAll, 2000);
+})();
+// ===== 城市分站数据 =====
+const cityData = {
+    hangzhou: {
+        name: '杭州站', cover: 'assets/hangzhou-01.jpg',
+        images: [
+            { url: 'assets/hangzhou-01.jpg', title: '杭州筠益AI闭门会现场1' },
+            { url: 'assets/hangzhou-02.jpg', title: '杭州筠益AI闭门会现场15' },
+            { url: 'assets/hangzhou-03.jpg', title: '杭州筠益AI闭门会现场17' },
+            { url: 'assets/hangzhou-04.jpg', title: '杭州筠益AI闭门会现场18' },
+            { url: 'assets/hangzhou-05.jpg', title: '杭州筠益AI闭门会现场19' },
+            { url: 'assets/hangzhou-06.jpg', title: '杭州筠益AI闭门会现场121' },
+            { url: 'assets/hangzhou-07.jpg', title: '杭州筠益AI闭门会现场133' },
+            { url: 'assets/hangzhou-08.jpg', title: '杭州筠益AI闭门会现场178' },
+            { url: 'assets/hangzhou-09.jpg', title: '杭州筠益AI闭门会现场188' },
+            { url: 'assets/hangzhou-10.jpg', title: '杭州筠益AI闭门会现场189' }
+        ]
+    },
+    weifang: {
+        name: '潍坊站', cover: 'assets/weifang-huiyi-1.jpg',
+        images: [
+            { url: 'assets/weifang-huiyi-1.jpg', title: '潍坊高新区管委会汇报' },
+            { url: 'assets/weifang-huiyi-2.jpg', title: '潍坊高新区管委会汇报1' },
+            { url: 'assets/weifang-huiyi-3.jpg', title: '潍坊高新区管委会汇报2' },
+            { url: 'assets/weifang-huiyi-4.jpg', title: '潍坊高新区管委会汇报3' },
+            { url: 'assets/weifang-huiyi-5.jpg', title: '潍坊高新汇报' },
+            { url: 'assets/weifang-guangdian-1.jpg', title: '光电园参观' },
+            { url: 'assets/weifang-guangdian-2.jpg', title: '潍坊高新区光电园参观' }
+        ]
+    },
+    qingdao: {
+        name: '青岛站', cover: 'assets/qingdao-yuanshigang.jpg',
+        images: [
+            { url: 'assets/qingdao-yuanshigang.jpg', title: '青岛院士港' },
+            { url: 'assets/qingdao-jinhainiu-1.jpg', title: '金海牛' },
+            { url: 'assets/qingdao-jinhainiu-2.jpg', title: '金海牛1' },
+            { url: 'assets/qingdao-jinhainiu-3.jpg', title: '金海牛2' },
+            { url: 'assets/qingdao-yinshunshun-2.jpg', title: '青岛尹顺顺组会议2' },
+            { url: 'assets/qingdao-yinshunshun-3.jpg', title: '青岛尹顺顺组会议3' },
+            { url: 'assets/qingdao-gongyeyanjiu.jpg', title: '联合工业技术研究院AI赋能沙龙' },
+            { url: 'assets/qingdao-zonggonghui.jpg', title: '联合市南总工会AI赋能会议' },
+            { url: 'assets/qingdao-kejihuodong-1.jpg', title: '2026青岛李沧区科技活动周启动仪式' },
+            { url: 'assets/qingdao-kejihuodong-2.jpg', title: '科技活动周启动仪式1' },
+            { url: 'assets/qingdao-opc-1.jpg', title: 'OPC赋能自媒体创业者需求对接会' },
+            { url: 'assets/qingdao-opc-2.jpg', title: 'OPC赋能自媒体创业者需求对接会1' },
+            { url: 'assets/qingdao-aiyuni-1.jpg', title: '第四十期国家AI创新应用先导区AI与你同行' },
+            { url: 'assets/qingdao-aiyuni-2.jpg', title: 'AI与你同行1' },
+            { url: 'assets/qingdao-tianan.jpg', title: '天安' },
+            { url: 'assets/qingdao-haoqi.jpg', title: '好奇工厂会议' },
+            { url: 'assets/qingdao-wangxinban.jpg', title: '网信办' },
+            { url: 'assets/qingdao-liandong.jpg', title: '联动U谷' },
+            { url: 'assets/qingdao-xingzheng.jpg', title: '行政审批局' },
+            { url: 'assets/qingdao-boshigang.jpg', title: '博士港' },
+            { url: 'assets/qingdao-chengyang.jpg', title: '城阳' }
+        ]
+    },
+    yantai: {
+        name: '烟台站', cover: 'assets/yantai-lansezhigu.jpg',
+        images: [
+            { url: 'assets/yantai-lansezhigu.jpg', title: '烟台蓝色智谷AI赋能沙龙' },
+            { url: 'assets/yantai-yeda.jpg', title: '烟台业达人才集团' },
+            { url: 'assets/yantai-huiyi.jpg', title: '烟台会议' },
+            { url: 'assets/yantai-chahuahui.jpg', title: '烟台茶话会' },
+            { url: 'assets/yantai-zhiyexueyuan.jpg', title: '烟台职业学院高质量就业创业指导讲座' }
+        ]
+    },
+    shenyang: {
+        name: '沈阳站', cover: 'assets/shenyang-chuangxin.jpg',
+        images: [
+            { url: 'assets/shenyang-chuangxin.jpg', title: '沈阳数创OPC创新产业园区' },
+            { url: 'assets/shenyang-opc.jpg', title: '沈阳数创OPC' },
+            { url: 'assets/shenyang-chanyeyuan.jpg', title: '沈阳数创OPC产业园区' }
+        ]
+    },
+    dalian: {
+        name: '大连站', cover: 'assets/dalian.jpg',
+        images: [
+            { url: 'assets/dalian.jpg', title: '大连AI重塑组织——筠益AI助力电商企业开辟AI新时代' }
+        ]
+    },
+    jinan: {
+        name: '济南站', cover: 'assets/jinan.jpg',
+        images: [
+            { url: 'assets/jinan.jpg', title: '济南会议' }
+        ]
+    },
+    other: {
+        name: '更多精彩', cover: 'assets/other-liaoning-1.jpg',
+        images: [
+            { url: 'assets/other-liaoning-1.jpg', title: '辽宁对外经贸学院AI' },
+            { url: 'assets/other-liaoning-2.jpg', title: '辽宁对外经贸学院AI赋能-智启未来' },
+            { url: 'assets/other-1.jpg', title: '活动现场' },
+            { url: 'assets/other-2.jpg', title: '活动现场' },
+                        { url: 'assets/other-4.jpg', title: '活动现场' },
+            { url: 'assets/other-5.jpg', title: '活动现场' },
+            { url: 'assets/other-6.jpg', title: '活动现场' },
+            { url: 'assets/other-7.jpg', title: '活动现场' },
+            { url: 'assets/other-8.jpg', title: '活动现场' },
+                                ]
+    }
+};
+
+// ===== 视频数据 =====
+const videoData = [
+    { url: 'assets/video-xiebo.mp4', cover: 'assets/weifang-huiyi-1.jpg', tag: '讲师分享', title: 'AI赋能实战分享', desc: '首席讲师现场分享企业AI落地方法论' },
+    { url: 'assets/video-zhangze.mp4', cover: 'assets/qingdao-gongyeyanjiu.jpg', tag: '讲师分享', title: 'AI技术应用分享', desc: '技术专家讲解大模型在企业中的应用实践' },
+    { url: 'assets/video-yantai.mp4', cover: 'assets/yantai-lansezhigu.jpg', tag: '会议现场', title: '烟台会议现场', desc: '烟台蓝色智谷AI赋能沙龙会议精彩回顾' },
+    { url: 'assets/video-xingzheng.mp4', cover: 'assets/qingdao-xingzheng.jpg', tag: '政府合作', title: '行政审批局AI交流', desc: '走进行政审批局，探讨AI政务服务创新应用' },
+    { url: 'assets/video-jinhainiu.mp4', cover: 'assets/qingdao-jinhainiu-1.jpg', tag: '园区活动', title: '金海牛产业园现场', desc: '金海牛产业园AI分享会现场实况记录' },
+    { url: 'assets/video-junyi3.mp4', cover: 'assets/hangzhou-01.jpg', tag: '现场记录', title: '筠益AI闭门会杭州站', desc: '杭州筠益AI闭门会现场实况记录' },
+    { url: 'assets/video-junyi4.mp4', cover: 'assets/hangzhou-02.jpg', tag: '现场记录', title: '筠益AI闭门会杭州站', desc: '杭州筠益AI闭门会现场实况记录' }
+];
+
+// ===== 渲染城市卡片 =====
+function renderCityCards() {
+    const grid = document.getElementById('cityGrid');
+    let html = '';
+    for (const [key, city] of Object.entries(cityData)) {
+        html += `
+            <div class="city-card fade-in" onclick="openLightbox('${key}')">
+                <div class="city-view-btn">查看图集</div>
+                <img src="${resolveUrl(city.cover)}" alt="${city.name}">
+                <div class="city-overlay">
+                    <div class="city-name">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        ${city.name}
+                    </div>
+                    <div class="city-count">${city.images.length} 张 <span>会销现场照片</span></div>
+                </div>
+            </div>
+        `;
+    }
+    grid.innerHTML = html;
+}
+
+// ===== 灯箱画廊逻辑 =====
+let currentCity = null;
+let currentIndex = 0;
+
+function openLightbox(cityKey) {
+    currentCity = cityKey;
+    currentIndex = 0;
+    const city = cityData[cityKey];
+    document.getElementById('lightboxTitle').textContent = city.name;
+    document.getElementById('lightbox').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    updateLightbox();
+    renderThumbs();
+}
+
+function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function navigateLightbox(direction) {
+    const city = cityData[currentCity];
+    currentIndex = (currentIndex + direction + city.images.length) % city.images.length;
+    updateLightbox();
+    updateThumbs();
+}
+
+function updateLightbox() {
+    const city = cityData[currentCity];
+    const img = document.getElementById('lightboxImg');
+    img.src = resolveUrl(city.images[currentIndex].url);
+    img.alt = city.images[currentIndex].title;
+    document.getElementById('lightboxCounter').textContent = `${currentIndex + 1} / ${city.images.length}`;
+}
+
+function renderThumbs() {
+    const city = cityData[currentCity];
+    const container = document.getElementById('lightboxThumbs');
+    let html = '';
+    city.images.forEach((img, i) => {
+        html += `<img class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" src="${resolveUrl(img.url)}" alt="" onclick="event.stopPropagation(); goToImage(${i})">`;
+    });
+    container.innerHTML = html;
+}
+
+function updateThumbs() {
+    const thumbs = document.querySelectorAll('.lightbox-thumb');
+    thumbs.forEach((t, i) => t.classList.toggle('active', i === currentIndex));
+}
+
+function goToImage(index) {
+    currentIndex = index;
+    updateLightbox();
+    updateThumbs();
+}
+
+document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox').classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+});
+
+document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target.id === 'lightbox') closeLightbox();
+});
+
+// ===== 渲染视频卡片 =====
+function renderVideos() {
+    const grid = document.getElementById('videoGrid');
+    let html = '';
+    videoData.forEach((video, i) => {
+        html += `
+            <div class="video-card fade-in">
+                <div class="video-player">
+                    <video id="video-${i}" src="${resolveUrl(video.url)}" preload="metadata" playsinline></video>
+                    <div class="video-play-overlay" id="overlay-${i}" onclick="playVideo(${i})">
+                        <div class="play-btn">
+                            <svg viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <span class="video-tag">${video.tag}</span>
+                    <h4>${video.title}</h4>
+                    <p>${video.desc}</p>
+                </div>
+            </div>
+        `;
+    });
+    grid.innerHTML = html;
+}
+
+function playVideo(index) {
+    const video = document.getElementById(`video-${index}`);
+    const overlay = document.getElementById(`overlay-${index}`);
+    document.querySelectorAll('.video-player video').forEach((v, i) => {
+        if (i !== index) {
+            v.pause();
+            document.getElementById(`overlay-${i}`).classList.remove('hidden');
+        }
+    });
+    video.play();
+    overlay.classList.add('hidden');
+    video.onpause = () => { if (!video.ended) overlay.classList.remove('hidden'); };
+    video.onended = () => overlay.classList.remove('hidden');
+}
+
+// ===== 滚动动画 =====
+function handleScrollAnimation() {
+    const elements = document.querySelectorAll('.fade-in');
+    elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 60) el.classList.add('visible');
+    });
+}
+window.addEventListener('scroll', handleScrollAnimation);
+window.addEventListener('load', () => {
+    handleScrollAnimation();
+    renderCityCards();
+    renderVideos();
+    setTimeout(handleScrollAnimation, 100);
+});
+
+// ===== 导航栏滚动效果 =====
+window.addEventListener('scroll', () => {
+    const navbar = document.getElementById('navbar');
+    if (window.pageYOffset > 10) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+});
+
+// ===== 表单提交 =====
+function handleSubmit(event) {
+    event.preventDefault();
+    const btn = event.target.querySelector('.btn-primary');
+    const originalText = btn.textContent;
+    btn.textContent = '提交成功！我们将尽快与您联系';
+    btn.style.background = '#2d8a4e';
+    btn.disabled = true;
+    setTimeout(() => {
+        event.target.reset();
+        btn.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+    }, 3000);
+}
+
+// ===== 移动端菜单 =====
+function toggleMobileMenu() {
+    const navLinks = document.querySelector('.nav-links');
+    if (navLinks.style.display === 'flex') {
+        navLinks.style.display = 'none';
+    } else {
+        navLinks.style.display = 'flex';
+        navLinks.style.flexDirection = 'column';
+        navLinks.style.position = 'absolute';
+        navLinks.style.top = '64px';
+        navLinks.style.left = '0';
+        navLinks.style.right = '0';
+        navLinks.style.background = '#fff';
+        navLinks.style.padding = '20px 24px';
+        navLinks.style.gap = '16px';
+        navLinks.style.borderBottom = '1px solid var(--border)';
+        navLinks.style.boxShadow = '0 8px 24px rgba(0,0,0,0.08)';
+    }
+}
+</script>
+
+</body>
+</html>
